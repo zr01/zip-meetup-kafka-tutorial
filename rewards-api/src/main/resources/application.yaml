@@ -20,7 +20,7 @@ spring:
       state.dir: /tmp/kafka-streams
   cloud:
     function:
-      definition: sinkProcessorEligiblePaymentRewards #;sinkProcessorAccountRewards
+      definition: sinkProcessorEligiblePaymentRewards;sinkProcessorAccountRewards
     stream:
       kafka:
         streams:
@@ -34,7 +34,7 @@ spring:
               sinkProcessorEligiblePaymentRewards:
                 application-id: processor-account-payments-repartition-v1.0
               sinkProcessorAccountRewards:
-                application-id: processor-account-rewards-v1.0
+                application-id: processor-account-rewards-v1.1
 
           bindings:
             # Sink to repartition data
@@ -94,6 +94,7 @@ spring:
     compose:
       file: .docker/dev-compose.yaml
       lifecycle-management: start_only
+      enabled: false
 
 logging:
   level:

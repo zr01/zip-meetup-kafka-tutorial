@@ -69,9 +69,11 @@ class SinkProcessorAccountRewardsService {
             .aggregate({
                 // This is the initial record, think of this as the `new` object
                 RewardsEarnedRecord.newBuilder().setRewardsBalance(0).build()
+
+                // DB query
             }, { accountId, event, record ->
                 // Calculated earned rewards
-                val earnedRewardsFromEvent = event.amount / 20
+                val earnedRewardsFromEvent = event.amount / 15
 
                 log.info { "Account $accountId current rewards is ${record.rewardsBalance}" }
                 // Applying the rewardsBalance to the existing record

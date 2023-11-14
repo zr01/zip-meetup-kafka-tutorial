@@ -48,3 +48,14 @@ Depending on how you want to group your schemas, make sure you typically just co
 
 This sub-module is meant to be built as part of the CI/CD of your project. The artifact (or `jar`) is to be pushed to your choice of package 
 repository.
+
+## Re-using the sub-module in this project
+
+After creating a project in the root, you can import the generated classes by adding the line below in `build.gradle.kts`.
+
+```kotlin
+// This is the dependencies section of the file
+dependencies {
+    implementation(project(":kafka-avro"))
+}
+```
