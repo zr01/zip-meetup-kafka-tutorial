@@ -1,0 +1,105 @@
+spring:
+  kafka:
+    producer:
+      properties:
+        key.serializer: org.apache.kafka.common.serialization.StringSerializer
+        value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+        retries: 3
+        acks: -1
+    consumer:
+      properties:
+        key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+    properties:
+      bootstrap.servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+      schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:8081}
+      auto.register.schemas: true
+      processing.guarantee: exactly_once_v2
+      state.dir: /tmp/kafka-streams
+  cloud:
+    function:
+      definition: sinkProcessorEligiblePaymentRewards #;sinkProcessorAccountRewards
+    stream:
+      kafka:
+        streams:
+          binder:
+            auto-create-topics: true
+            configuration:
+              default:
+                key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+                value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+            functions:
+              sinkProcessorEligiblePaymentRewards:
+                application-id: processor-account-payments-repartition-v1.0
+              sinkProcessorAccountRewards:
+                application-id: processor-account-rewards-v1.0
+
+          bindings:
+            # Sink to repartition data
+            sinkProcessorEligiblePaymentRewards-in-0:
+              consumer:
+                configuration:
+                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+            sinkProcessorEligiblePaymentRewards-out-0:
+              producer:
+                configuration:
+                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
+
+            # Rewards KTable Sink Processor
+            sinkProcessorAccountRewards-in-0:
+              consumer:
+                configuration:
+                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
+            sinkProcessorAccountRewards-out-0:
+              producer:
+                configuration:
+                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
+
+      bindings:
+        # Sink Processor
+        sinkProcessorEligiblePaymentRewards-in-0:
+          destination: payment-events
+          content-type: application/*+avro
+          consumer:
+            use-native-decoding: true
+            concurrency: 2
+        sinkProcessorEligiblePaymentRewards-out-0:
+          destination: eligible-payment-rewards
+          content-type: application/*+avro
+          producer:
+            use-native-encoding: true
+            partition-count: 2
+
+        # Sink Processor to store the rewards balance
+        sinkProcessorAccountRewards-in-0:
+          destination: eligible-payment-rewards
+          content-type: application/*+avro
+          consumer:
+            use-native-decoding: true
+            concurrency: 2
+        sinkProcessorAccountRewards-out-0:
+          destination: account-rewards
+          content-type: application/*+avro
+          producer:
+            use-native-encoding: true
+            partition-count: 2
+
+  docker:
+    compose:
+      file: .docker/dev-compose.yaml
+      lifecycle-management: start_only
+
+logging:
+  level:
+    root: WARN
+    org.apache: ERROR
+    zip.meetup: INFO
+
+server:
+  port: 8086

@@ -1,0 +1,33 @@
+### Make a Payment
+POST http://localhost:8085/payment
+Content-Type: application/json
+
+{
+  "accountId": "222",
+  "amount": 200,
+  "merchantId": "mid1"
+}
+
+### Query by account - payments
+GET http://localhost:8085/payment?account_id=222
+Content-Type: application/json
+
+### Make Another Payment
+POST http://localhost:8085/payment
+Content-Type: application/json
+
+{
+  "accountId": "222",
+  "amount": 119,
+  "merchantId": "transport"
+}
+
+### Make Ineligible Payment for Rewards
+POST http://localhost:8085/payment
+Content-Type: application/json
+
+{
+  "accountId": "222",
+  "amount": 15,
+  "merchantId": "lolly"
+}

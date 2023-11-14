@@ -1,0 +1,13 @@
+[
+  {
+    "namespace": "zip.meetup.reward",
+    "type": "record",
+    "name": "RewardsEarnedRecord",
+    "fields": [
+      {
+        "name": "rewardsBalance",
+        "type": "int"
+      }
+    ]
+  }
+]

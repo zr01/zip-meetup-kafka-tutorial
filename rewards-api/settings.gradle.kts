@@ -1,0 +1,1 @@
+rootProject.name = "rewards-api"

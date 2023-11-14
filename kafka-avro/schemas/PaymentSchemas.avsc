@@ -1,0 +1,94 @@
+[
+  {
+    "namespace": "zip.meetup.payment",
+    "type": "record",
+    "name": "PaymentInitiatedEvent",
+    "fields": [
+      {
+        "name": "accountId",
+        "type": "string"
+      },
+      {
+        "name": "amount",
+        "type": "int"
+      },
+      {
+        "name": "merchantId",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "namespace": "zip.meetup.payment",
+    "type": "record",
+    "name": "PaymentCompletedEvent",
+    "fields": [
+      {
+        "name": "accountId",
+        "type": "string"
+      },
+      {
+        "name": "amount",
+        "type": "int"
+      },
+      {
+        "name": "merchantId",
+        "type": "string"
+      },
+      {
+        "name": "isSuccess",
+        "type": "boolean"
+      }
+    ]
+  },
+  {
+    "namespace": "zip.meetup.payment",
+    "type": "record",
+    "name": "PaymentNotificationSentEvent",
+    "fields": [
+      {
+        "name": "accountId",
+        "type": "string"
+      },
+      {
+        "name": "isSent",
+        "type": "boolean"
+      }
+    ]
+  },
+  {
+    "namespace": "zip.meetup.payment",
+    "type": "record",
+    "name": "PaymentRecord",
+    "fields": [
+      {
+        "name": "accountId",
+        "type": "string"
+      },
+      {
+        "name": "amount",
+        "type": "int"
+      },
+      {
+        "name": "merchantId",
+        "type": "string"
+      },
+      {
+        "name": "isPaymentSuccess",
+        "type": [
+          "null",
+          "boolean"
+        ],
+        "default": null
+      },
+      {
+        "name": "isNotificationSent",
+        "type": [
+          "null",
+          "boolean"
+        ],
+        "default": null
+      }
+    ]
+  }
+]

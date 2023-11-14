@@ -1,0 +1,27 @@
+services:
+  kafka:
+    image: landoop/fast-data-dev
+    container_name: kafka-aio
+    environment:
+      ADV_HOST: "127.0.0.1"
+      RUNTESTS: "0"
+      SAMPLEDATA: "0"
+      RUNNING_SAMPLEDATA: "0"
+    ports:
+      - "2181:2181"
+      - "3030:3030"
+      - "8081-8083:8081-8083"
+      - "9581-9585:9581-9585"
+      - "9092:9092"
+#  db:
+#    image: postgres:16-alpine
+#    container_name: stream-db
+#    environment:
+#      POSTGRES_PASSWORD: testme
+#      PGDATA: /var/lib/streamdb/db
+#      POSTGRES_DB: stream_db
+#      COMPOSE_CONVERT_WINDOWS_PATHS: 1
+#    volumes:
+#      - ./.db/streamdb:/var/lib/streamdb
+#    ports:
+#      - "5432:5432"

@@ -1,0 +1,2 @@
+### Get rewards for account 222
+GET http://localhost:8086/accounts/222/rewards
