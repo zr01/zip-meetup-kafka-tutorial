@@ -29,8 +29,9 @@ class RewardsQueryController(
         // We hookup to the local state store in this instance of the service
         val store: ReadOnlyKeyValueStore<String, RewardsEarnedRecord> = queryService
             // This is the same name we had Materialized.`as`(...) earlier
-            .getQueryableStore("account-rewards-state-store",
-                QueryableStoreTypes.keyValueStore()
+            .getQueryableStore(
+                "account-rewards-state-store",
+                QueryableStoreTypes.keyValueStore(),
             )
 
         // Kafka only ever keeps 1 record in the state store

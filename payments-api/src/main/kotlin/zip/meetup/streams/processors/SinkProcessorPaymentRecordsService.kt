@@ -24,27 +24,29 @@ class SinkProcessorPaymentRecordsService {
         // Stream of events
         KStream<String, SpecificRecord>,
         // The upsert of the record to the KTable, and in most cases should be non-nullable!
-        KTable<String, PaymentRecord>
+        KTable<String, PaymentRecord>,
         > { stream ->
 
         // Aggregate incoming events into the PaymentRecord
         stream.groupByKey()
-            .aggregate({
-                PaymentRecord.newBuilder()
-                    .setAccountId("".utf8())
-                    .setAmount(0)
-                    .setMerchantId("".utf8())
-                    .build()
-            }, { paymentId, event, record ->
-                // Process each event as it comes and update the PaymentRecord
+            .aggregate(
+                {
+                    PaymentRecord.newBuilder()
+                        .setAccountId("".utf8())
+                        .setAmount(0)
+                        .setMerchantId("".utf8())
+                        .build()
+                },
+                { paymentId, event, record ->
+                    // Process each event as it comes and update the PaymentRecord
 
-                log.info { "Received payment with id of $paymentId" }
-                log.info { "Received event of ${event.schema.name}" }
-                log.info { "Before Updating record from KTable is $record" }
-                process(paymentId, event, record)
-            },
-            // Materialize as a state store to do record keeping
-                Materialized.`as`("payment-record-state-store")
+                    log.info { "Received payment with id of $paymentId" }
+                    log.info { "Received event of ${event.schema.name}" }
+                    log.info { "Before Updating record from KTable is $record" }
+                    process(paymentId, event, record)
+                },
+                // Materialize as a state store to do record keeping
+                Materialized.`as`("payment-record-state-store"),
             )
     }
 

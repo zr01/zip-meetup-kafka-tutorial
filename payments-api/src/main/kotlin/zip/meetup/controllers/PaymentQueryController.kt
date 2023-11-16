@@ -27,7 +27,7 @@ class PaymentQueryController(
         val store: ReadOnlyKeyValueStore<String, PaymentRecord> = queryService
             .getQueryableStore(
                 "payment-record-state-store",
-                QueryableStoreTypes.keyValueStore()
+                QueryableStoreTypes.keyValueStore(),
             )
 
         return store.all()

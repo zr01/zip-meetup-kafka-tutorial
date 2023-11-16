@@ -21,6 +21,10 @@ repositories {
     }
 }
 
+configurations.all {
+    exclude(group = "org.apache.avro", module = "avro-tools")
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -36,6 +40,7 @@ dependencies {
 
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
+    implementation("org.slf4j:slf4j-api:2.0.9")
 
     // Kafka
     implementation("org.springframework.cloud:spring-cloud-stream")
