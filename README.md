@@ -86,6 +86,6 @@ This sub-module is responsible for consuming the event `PaymentCompletedEvent` a
 
 ## Following this Tutorial
 
-1. To learn more about AVRO, go to `kafka-avro/README.md`
-2. To learn more about publishing to `Kafka` as `events` occur, go to `payments-api/README.md`
-3. To learn more about building the Topology from another source, go to `rewards-api/README.md`
+1. To learn more about AVRO, go to [kafka-avro](./kafka-avro)
+2. To learn more about publishing to `Kafka` as `events` occur, go to [payments-api](./payments-api)
+3. To learn more about building the Topology from another source, go to [rewards-api](./rewards-api)
