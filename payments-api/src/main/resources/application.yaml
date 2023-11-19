@@ -28,7 +28,7 @@ spring:
             auto-create-topics: true
             configuration:
               default:
-                key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+                key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             functions:
               sinkProcessorPaymentRecords:
@@ -37,24 +37,10 @@ spring:
                 application-id: processor-notifications-v1.0
 
           bindings:
-            sinkProcessorPaymentRecords-in-0:
-              consumer:
-                configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
             sinkProcessorPaymentRecords-out-0:
               producer:
                 configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                   value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
-
-            sinkProcessorNotifications-in-0:
-              consumer:
-                configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-            sinkProcessorNotifications-out-0:
-              producer:
-                configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
 
       bindings:
         # Our source processor, the only time we publish events
