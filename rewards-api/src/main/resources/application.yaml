@@ -4,14 +4,14 @@ spring:
       properties:
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
         retries: 3
         acks: -1
     consumer:
       properties:
         key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
     properties:
       bootstrap.servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
       schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:8081}
@@ -28,7 +28,7 @@ spring:
             auto-create-topics: true
             configuration:
               default:
-                key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+                key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             functions:
               sinkProcessorEligiblePaymentRewards:
@@ -41,25 +41,7 @@ spring:
             sinkProcessorEligiblePaymentRewards-in-0:
               consumer:
                 configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                   value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
-            sinkProcessorEligiblePaymentRewards-out-0:
-              producer:
-                configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
-
-            # Rewards KTable Sink Processor
-            sinkProcessorAccountRewards-in-0:
-              consumer:
-                configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
-            sinkProcessorAccountRewards-out-0:
-              producer:
-                configuration:
-                  key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
 
       bindings:
         # Sink Processor
