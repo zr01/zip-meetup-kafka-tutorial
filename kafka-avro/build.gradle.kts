@@ -15,7 +15,7 @@ java {
 
 dependencies {
     implementation("org.apache.avro:avro:1.11.2")
-    implementation("org.apache.avro:avro-tools:1.11.2")
+    runtimeOnly("org.apache.avro:avro-tools:1.11.2")
 }
 
 repositories {

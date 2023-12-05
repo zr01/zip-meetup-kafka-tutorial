@@ -11,10 +11,12 @@ import zip.meetup.payment.PaymentCompletedEvent
 import zip.meetup.payment.PaymentInitiatedEvent
 import zip.meetup.payment.PaymentNotificationSentEvent
 import zip.meetup.payment.PaymentRecord
+import zip.meetup.timeNowEpoch
 import zip.meetup.utf8
 import java.util.function.Function
 
 private val log = KotlinLogging.logger { }
+private val EVENT_SOURCE = "sink-processor-payment-records".utf8()
 
 @Service
 class SinkProcessorPaymentRecordsService {
@@ -33,6 +35,7 @@ class SinkProcessorPaymentRecordsService {
                 {
                     PaymentRecord.newBuilder()
                         .setAccountId("".utf8())
+                        .setPaymentId("".utf8())
                         .setAmount(0)
                         .setMerchantId("".utf8())
                         .build()
@@ -54,7 +57,7 @@ class SinkProcessorPaymentRecordsService {
         return when (event.schema.name) {
             PaymentInitiatedEvent.`SCHEMA$`.name -> {
                 log.info { "Creating new PaymentRecord for $paymentId" }
-                record.update(event as PaymentInitiatedEvent)
+                record.update(paymentId, event as PaymentInitiatedEvent)
             }
 
             PaymentCompletedEvent.`SCHEMA$`.name -> {
@@ -74,16 +77,23 @@ class SinkProcessorPaymentRecordsService {
     }
 }
 
-private fun PaymentRecord.update(event: PaymentInitiatedEvent): PaymentRecord = apply {
+private fun PaymentRecord.update(id: String, event: PaymentInitiatedEvent): PaymentRecord = apply {
+    paymentId = id.utf8()
     accountId = event.accountId
     amount = event.amount
     merchantId = event.merchantId
+    timestamp = timeNowEpoch()
+    source = EVENT_SOURCE
 }
 
 private fun PaymentRecord.update(event: PaymentCompletedEvent): PaymentRecord = apply {
     isPaymentSuccess = event.isSuccess
+    timestamp = timeNowEpoch()
+    source = EVENT_SOURCE
 }
 
 private fun PaymentRecord.update(event: PaymentNotificationSentEvent): PaymentRecord = apply {
     isNotificationSent = event.isSent
+    timestamp = timeNowEpoch()
+    source = EVENT_SOURCE
 }

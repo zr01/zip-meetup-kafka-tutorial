@@ -80,12 +80,6 @@ spring:
             use-native-encoding: true
             partition-count: 2
 
-  docker:
-    compose:
-      file: .docker/dev-compose.yaml
-      lifecycle-management: start_only
-      enabled: false
-
 logging:
   level:
     root: WARN

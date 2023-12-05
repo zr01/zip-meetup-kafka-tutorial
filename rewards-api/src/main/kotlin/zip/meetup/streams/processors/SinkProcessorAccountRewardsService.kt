@@ -10,9 +10,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 import zip.meetup.payment.PaymentCompletedEvent
 import zip.meetup.reward.RewardsEarnedRecord
+import zip.meetup.timeNowEpoch
+import zip.meetup.utf8
 import java.util.function.Function
 
 private val log = KotlinLogging.logger { }
+private val EVT_SOURCE_ACCT_REWARDS = "sink-processor-account-rewards".utf8()
 
 @Service
 class SinkProcessorAccountRewardsService {
@@ -68,7 +71,11 @@ class SinkProcessorAccountRewardsService {
             .aggregate(
                 {
                     // This is the initial record, think of this as the `new` object
-                    RewardsEarnedRecord.newBuilder().setRewardsBalance(0).build()
+                    RewardsEarnedRecord.newBuilder()
+                        .setRewardsBalance(0)
+                        .setTimestamp(timeNowEpoch())
+                        .setSource(EVT_SOURCE_ACCT_REWARDS)
+                        .build()
 
                     // DB query
                 },
@@ -79,6 +86,7 @@ class SinkProcessorAccountRewardsService {
                     log.info { "Account $accountId current rewards is ${record.rewardsBalance}" }
                     // Applying the rewardsBalance to the existing record
                     record.rewardsBalance += earnedRewardsFromEvent
+                    record.timestamp = timeNowEpoch()
                     log.info { "Account $accountId has spent ${event.amount}, earning reward $earnedRewardsFromEvent" }
 
                     // This is the record we publish to topic:account-rewards containing the updated rewardsBalance

@@ -8,9 +8,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 import zip.meetup.payment.PaymentCompletedEvent
 import zip.meetup.payment.PaymentNotificationSentEvent
+import zip.meetup.timeNowEpoch
+import zip.meetup.utf8
 import java.util.function.Function
 
 private val log = KotlinLogging.logger { }
+private val EVENT_SOURCE = "sink-processor-notifications-service".utf8()
 
 @Service
 class SinkProcessorNotificationsService {
@@ -35,4 +38,6 @@ class SinkProcessorNotificationsService {
 private fun PaymentCompletedEvent.toNotificationSent(isSent: Boolean) = PaymentNotificationSentEvent.newBuilder()
     .setAccountId(accountId)
     .setIsSent(isSent)
+    .setTimestamp(timeNowEpoch())
+    .setSource(EVENT_SOURCE)
     .build()

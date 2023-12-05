@@ -15,6 +15,14 @@
       {
         "name": "merchantId",
         "type": "string"
+      },
+      {
+        "name": "timestamp",
+        "type": "long"
+      },
+      {
+        "name": "source",
+        "type": "string"
       }
     ]
   },
@@ -38,6 +46,14 @@
       {
         "name": "isSuccess",
         "type": "boolean"
+      },
+      {
+        "name": "timestamp",
+        "type": "long"
+      },
+      {
+        "name": "source",
+        "type": "string"
       }
     ]
   },
@@ -53,6 +69,14 @@
       {
         "name": "isSent",
         "type": "boolean"
+      },
+      {
+        "name": "timestamp",
+        "type": "long"
+      },
+      {
+        "name": "source",
+        "type": "string"
       }
     ]
   },
@@ -61,6 +85,10 @@
     "type": "record",
     "name": "PaymentRecord",
     "fields": [
+      {
+        "name": "paymentId",
+        "type": "string"
+      },
       {
         "name": "accountId",
         "type": "string"
@@ -88,6 +116,14 @@
           "boolean"
         ],
         "default": null
+      },
+      {
+        "name": "timestamp",
+        "type": "long"
+      },
+      {
+        "name": "source",
+        "type": "string"
       }
     ]
   }

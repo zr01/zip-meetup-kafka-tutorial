@@ -13,15 +13,15 @@ services:
       - "8081-8083:8081-8083"
       - "9581-9585:9581-9585"
       - "9092:9092"
-#  db:
-#    image: postgres:16-alpine
-#    container_name: stream-db
-#    environment:
-#      POSTGRES_PASSWORD: testme
-#      PGDATA: /var/lib/streamdb/db
-#      POSTGRES_DB: stream_db
-#      COMPOSE_CONVERT_WINDOWS_PATHS: 1
-#    volumes:
-#      - ./.db/streamdb:/var/lib/streamdb
-#    ports:
-#      - "5432:5432"
+  db:
+    image: postgres:16-alpine
+    container_name: stream-db
+    environment:
+      POSTGRES_PASSWORD: testme
+      PGDATA: /var/lib/streamdb/db
+      POSTGRES_DB: stream_db
+      COMPOSE_CONVERT_WINDOWS_PATHS: 1
+    volumes:
+      - ./.db/streamdb:/var/lib/streamdb
+    ports:
+      - "5432:5432"

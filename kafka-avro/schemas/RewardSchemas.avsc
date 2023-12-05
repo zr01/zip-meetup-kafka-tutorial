@@ -7,6 +7,14 @@
       {
         "name": "rewardsBalance",
         "type": "int"
+      },
+      {
+        "name": "timestamp",
+        "type": "long"
+      },
+      {
+        "name": "source",
+        "type": "string"
       }
     ]
   }

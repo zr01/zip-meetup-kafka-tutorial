@@ -1,4 +1,14 @@
 spring:
+  flyway:
+    user: postgres
+    password: testme
+    url: jdbc:postgresql://localhost:5432/stream_db
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stream_db
+    username: postgres
+    password: testme
+---
+spring:
   kafka:
     producer:
       properties:
@@ -20,7 +30,7 @@ spring:
       state.dir: /tmp/kafka-streams
   cloud:
     function:
-      definition: sinkProcessorEligiblePaymentRewards;sinkProcessorAccountRewards
+      definition: sinkConsumerStagePayments
     stream:
       kafka:
         streams:
@@ -31,46 +41,17 @@ spring:
                 key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
                 value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             functions:
-              sinkProcessorEligiblePaymentRewards:
-                application-id: processor-account-payments-repartition-v1.0
-              sinkProcessorAccountRewards:
-                application-id: processor-account-rewards-v1.1
-
-          bindings:
-            # Sink to repartition data
-            sinkProcessorEligiblePaymentRewards-in-0:
-              consumer:
-                configuration:
-                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+              sinkConsumerStagePayments:
+                application-id: consumer-account-payment_history-dw_staging-v1.0
 
       bindings:
         # Sink Processor
-        sinkProcessorEligiblePaymentRewards-in-0:
-          destination: payment-events
+        sinkConsumerStagePayments-in-0:
+          destination: payment-history
           content-type: application/*+avro
           consumer:
             use-native-decoding: true
             concurrency: 2
-        sinkProcessorEligiblePaymentRewards-out-0:
-          destination: eligible-payment-rewards
-          content-type: application/*+avro
-          producer:
-            use-native-encoding: true
-            partition-count: 2
-
-        # Sink Processor to store the rewards balance
-        sinkProcessorAccountRewards-in-0:
-          destination: eligible-payment-rewards
-          content-type: application/*+avro
-          consumer:
-            use-native-decoding: true
-            concurrency: 2
-        sinkProcessorAccountRewards-out-0:
-          destination: account-rewards
-          content-type: application/*+avro
-          producer:
-            use-native-encoding: true
-            partition-count: 2
 
 logging:
   level:
@@ -79,4 +60,4 @@ logging:
     zip.meetup: INFO
 
 server:
-  port: 8086
+  port: 8087

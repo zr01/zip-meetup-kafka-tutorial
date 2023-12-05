@@ -32,12 +32,6 @@ dependencies {
     implementation("org.apache.kafka:kafka-streams")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    // DB
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//    implementation("org.hashids:hashids:1.0.3")
-//    implementation("org.postgresql:postgresql")
-//    implementation("org.flywaydb:flyway-core:9.22.2")
-
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
     implementation("org.slf4j:slf4j-api:2.0.9")
@@ -51,7 +45,6 @@ dependencies {
     implementation("org.apache.avro:avro:1.11.2")
     implementation(project(":kafka-avro"))
 
-    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-stream-test-binder")
 }
