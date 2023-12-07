@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import zip.meetup.payment.PaymentRecord
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import kotlin.streams.asStream
 
 private val log = KotlinLogging.logger { }
@@ -51,6 +54,8 @@ data class Payment(
     val accountId: String,
     val amount: Int,
     val merchantId: String,
+    val timestamp: OffsetDateTime,
+    val lastUpdatedBy: String,
     val isSuccess: Boolean?,
     val isNotificationSent: Boolean?
 )
@@ -60,6 +65,8 @@ private fun PaymentRecord.toPayment(paymentId: String) = Payment(
     accountId.toString(),
     amount,
     merchantId.toString(),
+    OffsetDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.of("UTC")),
+    source.toString(),
     isPaymentSuccess,
     isNotificationSent,
 )

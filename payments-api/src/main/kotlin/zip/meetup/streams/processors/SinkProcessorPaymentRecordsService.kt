@@ -7,6 +7,7 @@ import org.apache.kafka.streams.kstream.KTable
 import org.apache.kafka.streams.kstream.Materialized
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
+import zip.meetup.EMPTY
 import zip.meetup.payment.PaymentCompletedEvent
 import zip.meetup.payment.PaymentInitiatedEvent
 import zip.meetup.payment.PaymentNotificationSentEvent
@@ -34,10 +35,12 @@ class SinkProcessorPaymentRecordsService {
             .aggregate(
                 {
                     PaymentRecord.newBuilder()
-                        .setAccountId("".utf8())
-                        .setPaymentId("".utf8())
+                        .setAccountId(EMPTY)
+                        .setPaymentId(EMPTY)
                         .setAmount(0)
-                        .setMerchantId("".utf8())
+                        .setMerchantId(EMPTY)
+                        .setTimestamp(0L)
+                        .setSource(EMPTY)
                         .build()
                 },
                 { paymentId, event, record ->

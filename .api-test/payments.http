@@ -31,3 +31,13 @@ Content-Type: application/json
   "amount": 15,
   "merchantId": "lolly"
 }
+
+### Make Invalid Payment
+POST http://localhost:8085/payment
+Content-Type: application/json
+
+{
+  "accountId": "222",
+  "amount": -15,
+  "merchantId": "lolly"
+}

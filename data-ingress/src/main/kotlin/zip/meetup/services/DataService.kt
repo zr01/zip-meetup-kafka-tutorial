@@ -5,28 +5,28 @@ import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import zip.meetup.repositories.FctPaymentEntity
 import zip.meetup.repositories.FctPaymentsRepository
-import zip.meetup.repositories.StgPaymentEntity
-import zip.meetup.repositories.StgPaymentRepository
+import zip.meetup.repositories.StgEventsEntity
+import zip.meetup.repositories.StgEventsRepository
 
 private val log = KotlinLogging.logger { }
 
-interface PaymentsDataService {
-    fun stagePayment(payment: StgPaymentEntity): StgPaymentEntity
+interface DataService {
+    fun stagePayment(payment: StgEventsEntity): StgEventsEntity
     fun storeFact(fact: FctPaymentEntity): FctPaymentEntity
 }
 
 @Service
-class PaymentsDataServiceImpl(
-    private val stagingRepository: StgPaymentRepository,
+class DataServiceImpl(
+    private val stagingRepository: StgEventsRepository,
     private val factRepository: FctPaymentsRepository
-) : PaymentsDataService {
+) : DataService {
 
     @Transactional
-    override fun stagePayment(payment: StgPaymentEntity): StgPaymentEntity {
-        log.debug { "Inserting payment:${payment.paymentId} account:${payment.accountId}" }
+    override fun stagePayment(payment: StgEventsEntity): StgEventsEntity {
+        log.debug { "Inserting payment:${payment.eventRef} source:${payment.eventSource}" }
         return stagingRepository.save(payment)
             .also {
-                log.info { "Inserted ${payment.paymentId} account:${payment.accountId}" }
+                log.info { "Inserted ${payment.eventRef} account:${payment.eventSource}" }
             }
     }
 

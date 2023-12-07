@@ -12,7 +12,7 @@ import java.time.OffsetDateTime
 @Entity
 data class FctPaymentEntity(
     @get:Id
-    @Column(name = "payment_id")
+    @Column(name = "payment_id", insertable = true)
     var paymentId: String = "",
 
     @Column(name = "account_id")
@@ -24,10 +24,10 @@ data class FctPaymentEntity(
     @Column(name = "amount")
     var amount: Int = 0,
 
-    @Column(name = "is_payment_success")
+    @Column(name = "payment_success")
     var isPaymentSuccess: Boolean? = null,
 
-    @Column(name = "is_notification_sent")
+    @Column(name = "notification_sent")
     var isNotificationSent: Boolean? = null,
 
     @Column(name = "payment_processing_time")

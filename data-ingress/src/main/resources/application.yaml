@@ -4,7 +4,7 @@ spring:
     password: testme
     url: jdbc:postgresql://localhost:5432/stream_db
   datasource:
-    url: jdbc:postgresql://localhost:5432/stream_db
+    url: jdbc:postgresql://localhost:5432/stream_db?stringtype=unspecified
     username: postgres
     password: testme
 ---
@@ -23,8 +23,8 @@ spring:
         value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
         value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
     properties:
-      bootstrap.servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-      schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://localhost:8081}
+      bootstrap.servers: ${KAFKA_BOOTSTRAP_SERVERS:host.docker.internal:9092}
+      schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://host.docker.internal:8081}
       auto.register.schemas: true
       processing.guarantee: exactly_once_v2
       state.dir: /tmp/kafka-streams
@@ -42,12 +42,17 @@ spring:
                 value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             functions:
               sinkConsumerStagePayments:
-                application-id: consumer-account-payment_history-dw_staging-v1.0
+                application-id: consumer-account-payment_history-dw_staging-v1.1
+          bindings:
+            sinkConsumerStagePayments-in-0:
+              consumer:
+                configuration:
+                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
 
       bindings:
         # Sink Processor
         sinkConsumerStagePayments-in-0:
-          destination: payment-history
+          destination: payment-events
           content-type: application/*+avro
           consumer:
             use-native-decoding: true
