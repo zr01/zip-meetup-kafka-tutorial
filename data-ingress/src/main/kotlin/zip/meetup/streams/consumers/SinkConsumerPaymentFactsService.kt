@@ -87,7 +87,7 @@ class SinkConsumerPaymentFactsService(
                  * This second block of code we see here is what we execute to CREATE the initial record
                  */
                 service.storeFact(
-                    (event as PaymentInitiatedEvent).initRecord(paymentId)
+                    (event as PaymentInitiatedEvent).initRecord(paymentId),
                 )
                 log.info { "Inserted payment $paymentId from ${event.schema.name}" }
             })
@@ -107,7 +107,7 @@ private fun PaymentInitiatedEvent.initRecord(paymentId: String) = FctPaymentEnti
     accountId = accountId.toString(),
     merchantId = merchantId.toString(),
     amount = amount,
-    paymentStartedAt = Instant.ofEpochMilli(timestamp)
+    paymentStartedAt = Instant.ofEpochMilli(timestamp),
 )
 
 private fun FctPaymentEntity.merge(event: PaymentCompletedEvent) = apply {
