@@ -6,12 +6,12 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
-import java.time.OffsetDateTime
+import java.time.Instant
 
 @Table(name = "fct_payments")
 @Entity
 data class FctPaymentEntity(
-    @get:Id
+    @Id
     @Column(name = "payment_id", insertable = true)
     var paymentId: String = "",
 
@@ -24,17 +24,26 @@ data class FctPaymentEntity(
     @Column(name = "amount")
     var amount: Int = 0,
 
+    @Column(name = "payment_started_at")
+    var paymentStartedAt: Instant = Instant.now(),
+
+    @Column(name = "updated_at")
+    var updatedAt: Instant = Instant.now(),
+
     @Column(name = "payment_success")
     var isPaymentSuccess: Boolean? = null,
 
     @Column(name = "notification_sent")
     var isNotificationSent: Boolean? = null,
 
+    @Column(name = "notification_sent_at")
+    var notificationSentAt: Instant? = null,
+
     @Column(name = "payment_processing_time")
     var paymentProcessingTime: Long? = null,
 
     @Column(name = "payment_completed_at")
-    var paymentCompletedAt: OffsetDateTime? = null
+    var paymentCompletedAt: Instant? = null
 )
 
 @Repository

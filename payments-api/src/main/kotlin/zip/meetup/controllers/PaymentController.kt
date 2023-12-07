@@ -1,14 +1,13 @@
 package zip.meetup.controllers
 
-import mu.KotlinLogging
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import zip.meetup.generateId
 import zip.meetup.services.EventPublisherService
-
-private val log = KotlinLogging.logger { }
+import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 /**
  * In production, you'd have proper layering of interfaces to serve your controller.
@@ -37,6 +36,7 @@ class PaymentController(
         }
 
         // Success: amount > 0
+        TimeUnit.MILLISECONDS.sleep(Random.nextLong(300))
         eventPublisherService.publishPaymentEvent(paymentId, initEvent.toPaymentCompletedEvent(request, true))
 
         return request.toResponseWithPaymentId(paymentId)

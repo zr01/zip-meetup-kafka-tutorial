@@ -41,3 +41,13 @@ Content-Type: application/json
   "amount": -15,
   "merchantId": "lolly"
 }
+
+### Make another payment
+POST http://localhost:8085/payment
+Content-Type: application/json
+
+{
+  "accountId": "222",
+  "amount": 100,
+  "merchantId": "clothes"
+}

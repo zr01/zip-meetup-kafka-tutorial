@@ -39,7 +39,10 @@ data class StgEventsEntity(
     var eventTime: Instant = Instant.now(),
 
     @Column(name = "event_source")
-    var eventSource: String = ""
+    var eventSource: String = "",
+
+    @Column(name = "event_received")
+    var eventReceived: Instant = Instant.now()
 )
 
 data class UnstructuredEventEntity(

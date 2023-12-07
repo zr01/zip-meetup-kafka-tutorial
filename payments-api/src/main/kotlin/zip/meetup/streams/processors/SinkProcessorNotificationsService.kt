@@ -10,7 +10,9 @@ import zip.meetup.payment.PaymentCompletedEvent
 import zip.meetup.payment.PaymentNotificationSentEvent
 import zip.meetup.timeNowEpoch
 import zip.meetup.utf8
+import java.util.concurrent.TimeUnit
 import java.util.function.Function
+import kotlin.random.Random
 
 private val log = KotlinLogging.logger { }
 private val EVENT_SOURCE = "sink-processor-notifications-service".utf8()
@@ -23,6 +25,7 @@ class SinkProcessorNotificationsService {
         stream
             .filter { _, event -> event.schema == PaymentCompletedEvent.`SCHEMA$` }
             .map { paymentId, completedEvent ->
+                TimeUnit.MILLISECONDS.sleep(Random.nextLong(200))
                 log.info { "Payment ID         : $paymentId" }
                 log.info { "Notification Event : $completedEvent " }
                 if (completedEvent is PaymentCompletedEvent) {

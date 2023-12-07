@@ -14,14 +14,14 @@ spring:
       properties:
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
         retries: 3
         acks: -1
     consumer:
       properties:
         key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicNameStrategy
+        value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
     properties:
       bootstrap.servers: ${KAFKA_BOOTSTRAP_SERVERS:host.docker.internal:9092}
       schema.registry.url: ${KAFKA_SCHEMA_REGISTRY_URL:http://host.docker.internal:8081}
@@ -30,7 +30,7 @@ spring:
       state.dir: /tmp/kafka-streams
   cloud:
     function:
-      definition: sinkConsumerStagePayments
+      definition: sinkConsumerStagePayments;sinkConsumerPaymentFacts
     stream:
       kafka:
         streams:
@@ -42,16 +42,20 @@ spring:
                 value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             functions:
               sinkConsumerStagePayments:
-                application-id: consumer-account-payment_history-dw_staging-v1.1
-          bindings:
-            sinkConsumerStagePayments-in-0:
-              consumer:
-                configuration:
-                  value.subject.name.strategy: io.confluent.kafka.serializers.subject.RecordNameStrategy
+                application-id: consumer-payments-payment_events-dw_staging-v1.1
+              sinkConsumerPaymentFacts:
+                application-id: consumer-payments-payment_events-dw_facts-v1.3
 
       bindings:
         # Sink Processor
         sinkConsumerStagePayments-in-0:
+          destination: payment-events
+          content-type: application/*+avro
+          consumer:
+            use-native-decoding: true
+            concurrency: 2
+
+        sinkConsumerPaymentFacts-in-0:
           destination: payment-events
           content-type: application/*+avro
           consumer:

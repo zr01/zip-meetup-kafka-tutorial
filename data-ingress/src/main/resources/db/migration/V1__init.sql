@@ -6,7 +6,8 @@ CREATE TABLE stg_events
   event_ref          TEXT                     NOT NULL,
   unstructured_event JSONB                    NOT NULL,
   event_time         TIMESTAMP WITH TIME ZONE NOT NULL,
-  event_source       TEXT                     NOT NULL
+  event_source       TEXT                     NOT NULL,
+  event_received     TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- sequence for primary key
@@ -31,9 +32,11 @@ CREATE TABLE fct_payments
   amount                  INT  NOT NULL,
   payment_success         BOOL,
   notification_sent       BOOL,
+  notification_sent_at    TIMESTAMP WITH TIME ZONE,
   payment_started_at      TIMESTAMP WITH TIME ZONE,
   payment_processing_time BIGINT,
-  payment_completed_at    TIMESTAMP WITH TIME ZONE
+  payment_completed_at    TIMESTAMP WITH TIME ZONE,
+  updated_at              TIMESTAMP WITH TIME ZONE
 );
 
 -- Add index on account_id

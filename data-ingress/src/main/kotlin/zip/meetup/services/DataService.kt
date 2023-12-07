@@ -33,19 +33,9 @@ class DataServiceImpl(
     @Transactional
     override fun storeFact(fact: FctPaymentEntity): FctPaymentEntity {
         log.debug { "Upserting payment:${fact.paymentId} account:${fact.accountId}" }
-        factRepository.findById(fact.paymentId)
-            .ifPresentOrElse({ dbEntity ->
-                dbEntity.apply {
-                    isPaymentSuccess = fact.isPaymentSuccess
-                    isNotificationSent = fact.isNotificationSent
-                    paymentProcessingTime = fact.paymentProcessingTime
-                    paymentCompletedAt = fact.paymentCompletedAt
-                }
-            }, {
-                factRepository.save(fact)
-            })
+        factRepository.save(fact)
         return fact.also {
-            log.info { "Upserted payment:${fact.paymentId} accout:${fact.accountId}" }
+            log.info { "Upserted payment:${fact.paymentId} account:${fact.accountId}" }
         }
     }
 }
