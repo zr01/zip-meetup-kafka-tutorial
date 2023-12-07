@@ -7,6 +7,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/stream_db?stringtype=unspecified
     username: postgres
     password: testme
+  threads:
+    virtual:
+      enabled: true
 ---
 spring:
   kafka:

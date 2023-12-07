@@ -65,7 +65,7 @@ private fun PaymentRecord.toPayment(paymentId: String) = Payment(
     accountId.toString(),
     amount,
     merchantId.toString(),
-    OffsetDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.of("UTC")),
+    OffsetDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.of("Australia/Sydney")),
     source.toString(),
     isPaymentSuccess,
     isNotificationSent,
