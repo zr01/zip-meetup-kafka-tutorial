@@ -6,23 +6,28 @@
     "fields": [
       {
         "name": "accountId",
-        "type": "string"
+        "type": "string",
+        "doc": "Account ID"
       },
       {
         "name": "amount",
-        "type": "int"
+        "type": "int",
+        "doc": "Amount in minor unit or cents"
       },
       {
         "name": "merchantId",
-        "type": "string"
+        "type": "string",
+        "doc": "Merchant ID"
       },
       {
         "name": "timestamp",
-        "type": "long"
+        "type": "long",
+        "doc": "Timestamp represented in millisecond"
       },
       {
         "name": "source",
-        "type": "string"
+        "type": "string",
+        "doc": "The service source of the event"
       }
     ]
   },
@@ -33,27 +38,33 @@
     "fields": [
       {
         "name": "accountId",
-        "type": "string"
+        "type": "string",
+        "doc": "Account ID"
       },
       {
         "name": "amount",
-        "type": "int"
+        "type": "int",
+        "doc": "Amount in minor unit or cents"
       },
       {
         "name": "merchantId",
-        "type": "string"
+        "type": "string",
+        "doc": "Merchant ID"
       },
       {
         "name": "isSuccess",
-        "type": "boolean"
+        "type": "boolean",
+        "doc": "Success Indicator of the Payment"
       },
       {
         "name": "timestamp",
-        "type": "long"
+        "type": "long",
+        "doc": "Timestamp represented in millisecond"
       },
       {
         "name": "source",
-        "type": "string"
+        "type": "string",
+        "doc": "The service source of the event"
       }
     ]
   },
@@ -64,19 +75,23 @@
     "fields": [
       {
         "name": "accountId",
-        "type": "string"
+        "type": "string",
+        "doc": "Account ID"
       },
       {
         "name": "isSent",
-        "type": "boolean"
+        "type": "boolean",
+        "doc": "Indicator if a notification has been sent"
       },
       {
         "name": "timestamp",
-        "type": "long"
+        "type": "long",
+        "doc": "Timestamp represented in millisecond"
       },
       {
         "name": "source",
-        "type": "string"
+        "type": "string",
+        "doc": "The service source of the event"
       }
     ]
   },
@@ -87,19 +102,23 @@
     "fields": [
       {
         "name": "paymentId",
-        "type": "string"
+        "type": "string",
+        "doc": "Payment ID"
       },
       {
         "name": "accountId",
-        "type": "string"
+        "type": "string",
+        "doc": "Account ID"
       },
       {
         "name": "amount",
-        "type": "int"
+        "type": "int",
+        "doc": "Amount in minor unit or cents"
       },
       {
         "name": "merchantId",
-        "type": "string"
+        "type": "string",
+        "doc": "Merchant ID"
       },
       {
         "name": "isPaymentSuccess",
@@ -107,7 +126,8 @@
           "null",
           "boolean"
         ],
-        "default": null
+        "default": null,
+        "doc": "Indicator if payment is successful"
       },
       {
         "name": "isNotificationSent",
@@ -115,15 +135,18 @@
           "null",
           "boolean"
         ],
-        "default": null
+        "default": null,
+        "doc": "Indicator if payment notification is sent"
       },
       {
         "name": "timestamp",
-        "type": "long"
+        "type": "long",
+        "doc": "Timestamp represented in millisecond"
       },
       {
         "name": "source",
-        "type": "string"
+        "type": "string",
+        "doc": "The service source of the event"
       }
     ]
   }
