@@ -28,6 +28,9 @@ dependencies {
     implementation("org.apache.kafka:kafka-streams")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+    // Observability
+    compileOnly("com.dynatrace.oneagent.sdk.java:oneagent-sdk:1.9.0")
+
     // Logging
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
