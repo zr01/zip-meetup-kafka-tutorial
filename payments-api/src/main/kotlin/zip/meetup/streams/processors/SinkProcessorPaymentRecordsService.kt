@@ -1,13 +1,22 @@
 package zip.meetup.streams.processors
 
+import com.dynatrace.oneagent.sdk.api.OneAgentSDK
+import com.dynatrace.oneagent.sdk.api.enums.ChannelType
+import com.dynatrace.oneagent.sdk.api.enums.MessageDestinationType
+import com.dynatrace.oneagent.sdk.api.infos.MessagingSystemInfo
 import mu.KotlinLogging
 import org.apache.avro.specific.SpecificRecord
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.kstream.KTable
 import org.apache.kafka.streams.kstream.Materialized
+import org.apache.kafka.streams.processor.api.Processor
+import org.apache.kafka.streams.processor.api.ProcessorSupplier
 import org.springframework.context.annotation.Bean
 import org.springframework.stereotype.Service
 import zip.meetup.EMPTY
+import zip.meetup.observability.agent
+import zip.meetup.observability.setIncomingTrace
+import zip.meetup.observability.setMessagingInfo
 import zip.meetup.payment.PaymentCompletedEvent
 import zip.meetup.payment.PaymentInitiatedEvent
 import zip.meetup.payment.PaymentNotificationSentEvent
@@ -22,6 +31,11 @@ private val EVENT_SOURCE = "sink-processor-payment-records".utf8()
 @Service
 class SinkProcessorPaymentRecordsService {
 
+    private val msgInfo: MessagingSystemInfo? = null
+
+    private fun msgInfo(): MessagingSystemInfo? = msgInfo
+        ?: agent.setMessagingInfo("kafka", "payment-events", MessageDestinationType.TOPIC, ChannelType.TCP_IP)
+
     @Bean
     fun sinkProcessorPaymentRecords() = Function<
         // Stream of events
@@ -30,8 +44,21 @@ class SinkProcessorPaymentRecordsService {
         KTable<String, PaymentRecord>,
         > { stream ->
 
-        // Aggregate incoming events into the PaymentRecord
-        stream.groupByKey()
+        stream
+            .process(
+                ProcessorSupplier<String, SpecificRecord, String, PaymentRecord> {
+                    Processor { record ->
+                        log.info { "ProcessorSupplier received ${record.key()} and ${record.value().schema.name}" }
+                        val traceHeader = record?.headers()?.lastHeader(OneAgentSDK.DYNATRACE_MESSAGE_PROPERTYNAME)?.value()?.let { String(it) }
+                        if (traceHeader != null) {
+                            msgInfo()?.setIncomingTrace(traceHeader) {
+                                log.info { "Set trace to message ${record.key()}:${record.value()}" }
+                            }
+                        }
+                    }
+                }
+            )
+            .groupByKey() // Aggregate incoming events into the PaymentRecord
             .aggregate(
                 {
                     PaymentRecord.newBuilder()
